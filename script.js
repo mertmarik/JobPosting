@@ -23,17 +23,41 @@ function initializeEventListeners() {
     document.getElementById('paymentTypeFilter').addEventListener('change', filterJobs);
 }
 
-// İş ilanlarını JSON dosyasından yükle
+// İş ilanlarını yükle (önce localStorage'dan, yoksa JSON dosyasından)
 async function loadJobs() {
     try {
-        const response = await fetch('jobs.json');
-        jobs = await response.json();
-        filteredJobs = [...jobs];
-        populateTechnologyFilter();
-        displayJobs();
+        // Önce localStorage'dan kontrol et
+        const savedJobs = localStorage.getItem('jobs');
+        
+        if (savedJobs) {
+            // LocalStorage'da veri varsa onu kullan
+            jobs = JSON.parse(savedJobs);
+            filteredJobs = [...jobs];
+            populateTechnologyFilter();
+            displayJobs();
+            showNotification('Veriler yerel depolamadan yüklendi', 'info');
+        } else {
+            // LocalStorage'da veri yoksa JSON dosyasından yükle
+            const response = await fetch('jobs.json');
+            jobs = await response.json();
+            filteredJobs = [...jobs];
+            
+            // İlk yüklemede localStorage'a kaydet
+            localStorage.setItem('jobs', JSON.stringify(jobs));
+            
+            populateTechnologyFilter();
+            displayJobs();
+            showNotification('Veriler JSON dosyasından yüklendi', 'info');
+        }
     } catch (error) {
         console.error('İş ilanları yüklenirken hata oluştu:', error);
+        
+        // JSON dosyası da yüklenemezse boş array ile başla
+        jobs = [];
+        filteredJobs = [];
+        localStorage.setItem('jobs', JSON.stringify(jobs));
         showNoJobsMessage();
+        showNotification('Veriler yüklenemedi, boş liste ile başlanıyor', 'error');
     }
 }
 
@@ -270,11 +294,16 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// JSON dosyasını güncelleme simülasyonu
+// JSON dosyasını güncelle (localStorage kullanarak)
 function updateJobsJSON() {
-    // Gerçek bir uygulamada burada backend API'ye istek gönderilir
-    // Şimdilik browser'da localStorage kullanabiliriz
-    localStorage.setItem('jobs', JSON.stringify(jobs));
+    try {
+        // LocalStorage'a kaydet
+        localStorage.setItem('jobs', JSON.stringify(jobs));
+        console.log('Veriler localStorage\'a kaydedildi');
+    } catch (error) {
+        console.error('Veriler kaydedilirken hata oluştu:', error);
+        showNotification('Veriler kaydedilemedi!', 'error');
+    }
 }
 
 // LocalStorage'dan verileri yükle (JSON dosyası yoksa)
@@ -285,5 +314,15 @@ function loadJobsFromStorage() {
         filteredJobs = [...jobs];
         populateTechnologyFilter();
         displayJobs();
+        return true;
+    }
+    return false;
+}
+
+// LocalStorage'ı temizle (geliştirme amaçlı)
+function clearStorage() {
+    if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
+        localStorage.removeItem('jobs');
+        location.reload();
     }
 }

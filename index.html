@@ -18,9 +18,14 @@
     <main class="container">
         <!-- İş Ekleme Formu -->
         <section class="add-job-section">
-            <button id="toggleForm" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Yeni İş İlanı Ekle
-            </button>
+            <div class="action-buttons">
+                <button id="toggleForm" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Yeni İş İlanı Ekle
+                </button>
+                <button onclick="clearStorage()" class="btn btn-secondary">
+                    <i class="fas fa-trash"></i> Verileri Temizle
+                </button>
+            </div>
             
             <form id="jobForm" class="job-form hidden">
                 <h2>Yeni İş İlanı</h2>
