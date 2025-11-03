@@ -2,6 +2,9 @@
 let jobs = [];
 let filteredJobs = [];
 
+// API base URL - production'da değiştirilecek
+const API_BASE_URL = window.location.origin; // Dinamik URL
+
 // Sayfa yüklendiğinde çalışacak fonksiyonlar
 document.addEventListener('DOMContentLoaded', function() {
     loadJobs();
@@ -23,41 +26,41 @@ function initializeEventListeners() {
     document.getElementById('paymentTypeFilter').addEventListener('change', filterJobs);
 }
 
-// İş ilanlarını yükle (önce localStorage'dan, yoksa JSON dosyasından)
+// İş ilanlarını API'den yükle
 async function loadJobs() {
     try {
-        // Önce localStorage'dan kontrol et
-        const savedJobs = localStorage.getItem('jobs');
+        showNotification('Veriler yükleniyor...', 'info');
         
+        const response = await fetch(`${API_BASE_URL}/api/jobs`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        jobs = await response.json();
+        filteredJobs = [...jobs];
+        populateTechnologyFilter();
+        displayJobs();
+        
+        showNotification(`${jobs.length} iş ilanı başarıyla yüklendi`, 'success');
+        
+    } catch (error) {
+        console.error('İş ilanları yüklenirken hata oluştu:', error);
+        
+        // Fallback: localStorage'dan yüklemeyi dene
+        const savedJobs = localStorage.getItem('jobs');
         if (savedJobs) {
-            // LocalStorage'da veri varsa onu kullan
             jobs = JSON.parse(savedJobs);
             filteredJobs = [...jobs];
             populateTechnologyFilter();
             displayJobs();
-            showNotification('Veriler yerel depolamadan yüklendi', 'info');
+            showNotification('Veriler yerel depolamadan yüklendi (offline mod)', 'warning');
         } else {
-            // LocalStorage'da veri yoksa JSON dosyasından yükle
-            const response = await fetch('jobs.json');
-            jobs = await response.json();
-            filteredJobs = [...jobs];
-            
-            // İlk yüklemede localStorage'a kaydet
-            localStorage.setItem('jobs', JSON.stringify(jobs));
-            
-            populateTechnologyFilter();
-            displayJobs();
-            showNotification('Veriler JSON dosyasından yüklendi', 'info');
+            jobs = [];
+            filteredJobs = [];
+            showNoJobsMessage();
+            showNotification('Veriler yüklenemedi. Sunucu bağlantısını kontrol edin.', 'error');
         }
-    } catch (error) {
-        console.error('İş ilanları yüklenirken hata oluştu:', error);
-        
-        // JSON dosyası da yüklenemezse boş array ile başla
-        jobs = [];
-        filteredJobs = [];
-        localStorage.setItem('jobs', JSON.stringify(jobs));
-        showNoJobsMessage();
-        showNotification('Veriler yüklenemedi, boş liste ile başlanıyor', 'error');
     }
 }
 
@@ -211,30 +214,76 @@ function handleFormSubmit(e) {
     addJob(newJob);
 }
 
-// Yeni iş ekle
-function addJob(job) {
-    jobs.unshift(job); // En başa ekle
-    filteredJobs = [...jobs];
-    populateTechnologyFilter();
-    displayJobs();
-    hideForm();
-    
-    // Başarı mesajı göster
-    showNotification('İş ilanı başarıyla eklendi!', 'success');
-    
-    // JSON dosyasını güncelleme simülasyonu
-    updateJobsJSON();
-}
-
-// İş sil
-function deleteJob(jobId) {
-    if (confirm('Bu iş ilanını silmek istediğinizden emin misiniz?')) {
-        jobs = jobs.filter(job => job.id !== jobId);
-        filteredJobs = filteredJobs.filter(job => job.id !== jobId);
+// Yeni iş ekle - API kullanarak
+async function addJob(job) {
+    try {
+        showNotification('İş ilanı kaydediliyor...', 'info');
+        
+        const response = await fetch(`${API_BASE_URL}/api/jobs`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(job)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const savedJob = await response.json();
+        
+        // Local state'i güncelle
+        jobs.unshift(savedJob);
+        filteredJobs = [...jobs];
+        
+        // LocalStorage'a da kaydet (offline backup için)
+        localStorage.setItem('jobs', JSON.stringify(jobs));
+        
         populateTechnologyFilter();
         displayJobs();
-        showNotification('İş ilanı silindi!', 'error');
-        updateJobsJSON();
+        hideForm();
+        
+        showNotification('İş ilanı başarıyla eklendi!', 'success');
+        
+    } catch (error) {
+        console.error('İş eklenirken hata:', error);
+        showNotification('İş ilanı eklenirken hata oluştu!', 'error');
+    }
+}
+
+// İş sil - API kullanarak
+async function deleteJob(jobId) {
+    if (!confirm('Bu iş ilanını silmek istediğinizden emin misiniz?')) {
+        return;
+    }
+    
+    try {
+        showNotification('İş ilanı siliniyor...', 'info');
+        
+        const response = await fetch(`${API_BASE_URL}/api/jobs/${jobId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Local state'i güncelle
+        jobs = jobs.filter(job => job.id !== jobId);
+        filteredJobs = filteredJobs.filter(job => job.id !== jobId);
+        
+        // LocalStorage'a da kaydet (offline backup için)
+        localStorage.setItem('jobs', JSON.stringify(jobs));
+        
+        populateTechnologyFilter();
+        displayJobs();
+        
+        showNotification('İş ilanı başarıyla silindi!', 'success');
+        
+    } catch (error) {
+        console.error('İş silinirken hata:', error);
+        showNotification('İş ilanı silinirken hata oluştu!', 'error');
     }
 }
 
@@ -294,35 +343,34 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// JSON dosyasını güncelle (localStorage kullanarak)
-function updateJobsJSON() {
+// LocalStorage'ı temizle ve sunucudan yeniden yükle
+async function clearStorage() {
+    if (!confirm('Tüm yerel veriler temizlenecek ve sunucudan yeniden yüklenecek. Emin misiniz?')) {
+        return;
+    }
+    
     try {
-        // LocalStorage'a kaydet
-        localStorage.setItem('jobs', JSON.stringify(jobs));
-        console.log('Veriler localStorage\'a kaydedildi');
-    } catch (error) {
-        console.error('Veriler kaydedilirken hata oluştu:', error);
-        showNotification('Veriler kaydedilemedi!', 'error');
-    }
-}
-
-// LocalStorage'dan verileri yükle (JSON dosyası yoksa)
-function loadJobsFromStorage() {
-    const savedJobs = localStorage.getItem('jobs');
-    if (savedJobs) {
-        jobs = JSON.parse(savedJobs);
-        filteredJobs = [...jobs];
-        populateTechnologyFilter();
-        displayJobs();
-        return true;
-    }
-    return false;
-}
-
-// LocalStorage'ı temizle (geliştirme amaçlı)
-function clearStorage() {
-    if (confirm('Tüm veriler silinecek. Emin misiniz?')) {
         localStorage.removeItem('jobs');
-        location.reload();
+        showNotification('Yerel veriler temizlendi, sunucudan yeniden yükleniyor...', 'info');
+        await loadJobs();
+    } catch (error) {
+        console.error('Veriler temizlenirken hata:', error);
+        showNotification('Veriler temizlenirken hata oluştu!', 'error');
+    }
+}
+
+// Sunucu durumunu kontrol et
+async function checkServerStatus() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/health`);
+        if (response.ok) {
+            const data = await response.json();
+            showNotification('Sunucu bağlantısı aktif ✅', 'success');
+            return true;
+        }
+        return false;
+    } catch (error) {
+        showNotification('Sunucu bağlantısı yok ❌', 'error');
+        return false;
     }
 }

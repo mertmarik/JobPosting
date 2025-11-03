@@ -178,6 +178,16 @@ main {
     transform: translateY(-2px);
 }
 
+.btn-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #3d8bfe 0%, #2bb0ed 100%);
+    transform: translateY(-2px);
+}
+
 .btn-danger {
     background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
     color: white;

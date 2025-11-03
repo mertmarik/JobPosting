@@ -1,38 +1,14 @@
 [
-    {
-        "id": 1,
-        "title": "Frontend Developer",
-        "company": "TechCorp",
-        "requirements": "React, TypeScript, HTML/CSS bilgisi. En az 2 yıl deneyim. Responsive tasarım deneyimi.",
-        "technology": "React, TypeScript, CSS",
-        "salary": "18000 TL",
-        "paymentType": "Aylık",
-        "duration": "Sürekli",
-        "jobLink": "https://example.com/job1",
-        "dateAdded": "2024-10-29"
-    },
-    {
-        "id": 2,
-        "title": "Backend Developer",
-        "company": "StartupXYZ",
-        "requirements": "Node.js, Express.js, MongoDB deneyimi. RESTful API geliştirme bilgisi.",
-        "technology": "Node.js, MongoDB, Express",
-        "salary": "120 TL",
-        "paymentType": "Saatlik",
-        "duration": "6 ay",
-        "jobLink": "https://example.com/job2",
-        "dateAdded": "2024-10-28"
-    },
-    {
-        "id": 3,
-        "title": "Full Stack Developer",
-        "company": "Digital Agency",
-        "requirements": "React, Node.js, PostgreSQL. Agile metodoloji deneyimi. Git kullanımı.",
-        "technology": "React, Node.js, PostgreSQL",
-        "salary": "25000 TL",
-        "paymentType": "Fixed Price",
-        "duration": "3 ay",
-        "jobLink": "https://example.com/job3",
-        "dateAdded": "2024-10-27"
-    }
+  {
+    "id": 1762199109071,
+    "title": "dsfsd",
+    "company": "dsfdsf",
+    "requirements": "dsfsd",
+    "technology": "sdfsdf",
+    "salary": "23",
+    "paymentType": "Saatlik",
+    "duration": "2",
+    "jobLink": "https://sgfddf.com",
+    "dateAdded": "2025-11-03"
+  }
 ]

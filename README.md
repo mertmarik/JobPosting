@@ -1,6 +1,15 @@
-# İş İlanları Websitesi
+# İş İlanları Websitesi - Backend + Frontend
 
-Modern ve responsive tasarıma sahip iş ilanları websitesi. JSON dosyasını veritabanı olarak kullanarak iş ilanlarını kart formatında görüntüler.
+Modern ve responsive tasarıma sahip iş ilanları web uygulaması. Node.js/Express backend ve vanilla JavaScript frontend ile JSON dosyasını veritabanı olarak kullanarak iş ilanlarını kart formatında görüntüler.
+
+## 🚀 Yeni Backend Özellikleri
+
+- ✅ **RESTful API** - Tüm CRUD işlemleri
+- ✅ **Gerçek Veritabanı** - Sunucuda JSON dosyası
+- ✅ **Multi-User Support** - Herkes aynı verileri görür
+- ✅ **Real-time Sync** - Veriler anında güncellenir
+- ✅ **Offline Fallback** - İnternet yoksa localStorage
+- ✅ **Render.com Ready** - Production deploy için hazır
 
 ## Özellikler
 
