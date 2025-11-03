@@ -24,6 +24,59 @@ function initializeEventListeners() {
     document.getElementById('searchInput').addEventListener('input', filterJobs);
     document.getElementById('technologyFilter').addEventListener('change', filterJobs);
     document.getElementById('paymentTypeFilter').addEventListener('change', filterJobs);
+    
+    // Mobile optimizations
+    initializeMobileOptimizations();
+}
+
+// Mobile özel optimizasyonlar
+function initializeMobileOptimizations() {
+    // Touch event'leri için optimizasyon
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+        
+        // iOS Safari için viewport height fix
+        const setVH = () => {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        };
+        
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(setVH, 100);
+        });
+    }
+    
+    // Prevent zoom on form inputs (iOS)
+    const inputs = document.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            if (window.innerWidth < 768) {
+                input.style.fontSize = '16px';
+            }
+        });
+    });
+    
+    // Smooth scroll polyfill for older browsers
+    if (!('scrollBehavior' in document.documentElement.style)) {
+        const smoothScrollLinks = document.querySelectorAll('a[href^="#"]');
+        smoothScrollLinks.forEach(link => {
+            link.addEventListener('click', smoothScrollPolyfill);
+        });
+    }
+}
+
+// Smooth scroll polyfill
+function smoothScrollPolyfill(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
 }
 
 // İş ilanlarını API'den yükle

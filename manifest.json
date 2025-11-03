@@ -1,0 +1,25 @@
+{
+  "name": "İş İlanları - Job Listings",
+  "short_name": "İş İlanları",
+  "description": "Teknoloji alanındaki iş fırsatlarını keşfedin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "tr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeTE9IjAiIHgyPSIxOTIiIHkyPSIxOTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSIyNCIgZmlsbD0idXJsKCNhKSIvPjxwYXRoIGQ9Ik02NCAxMDRIMTI4VjEyOEg2NFYxMDRaTTQ4IDY0SDQ4VjEyOEM0OCA5OC40NjI5IDQ2LjQ2MjkgOTYgNDAgOTZIMzJWODBINDBDNDQuNDE4MiA4MCA0OCA3Ni40MTgyIDQ4IDcyVjY0Wk0xNDQgNjRWNzJDMTQ0IDc2LjQxODIgMTQ3LjU4MiA4MCA1MiA4MEgxNjBWOTZIMTUyQzE0NS41MzcgOTYgMTQ0IDk4LjQ2MjkgMTQ0IDEyOFY2NFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMCIgeTE9IjAiIHgyPSI1MTIiIHkyPSI1MTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj48c3RvcCBzdG9wLWNvbG9yPSIjNjY3ZWVhIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNzY0YmEyIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSI2NCIgZmlsbD0idXJsKCNhKSIvPjxwYXRoIGQ9Ik0xNzIgMjc4SDM0MFYzNDJIMTcyVjI3OFpNMTI4IDE3MEgxMjhWMzQyQzEyOCAyNjIuMzc3IDEyNC4zNzcgMjU2IDEwNiAyNTZIODVWMjE0SDEwNkMxMTguMTA5IDIxNCAxMjggMjAzLjEwOSAxMjggMTkyVjE3MFpNMzg0IDE3MFYxOTJDMzg0IDIwMy4xMDkgMzkzLjg5MSAyMTQgNDA2IDIxNEg0MjdWMjU2SDQwNkMzODcuNjIzIDI1NiAzODQgMjYyLjM3NyAzODQgMzQyVjE3MFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
